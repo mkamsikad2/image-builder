@@ -14,7 +14,6 @@
         {
           "disk_size": "{{user `disk_size`}}",
           "storage_pool": "{{user `storage_pool`}}",
-          "storage_pool_type": "{{user `storage_pool_type`}}",
           "type": "scsi"
         }
       ],
@@ -27,12 +26,20 @@
       "name": "{{user `build_name`}}",
       "network_adapters": [
         {
-          "bridge": "{{user `bridge`}}"
+          "bridge": "{{user `bridge`}}",
+          "vlan_tag": "{{user `vlan`}}",
+          "model": "virtio"
+        },
+        {
+          "bridge": "{{user `bridge`}}",
+          "vlan_tag": "201",
+          "model": "virtio",
+          "mtu": "9000"
         }
       ],
       "node": "{{ user `node` }}",
       "sockets": "{{user `sockets`}}",
-      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
       "ssh_timeout": "2h",
       "ssh_username": "{{user `ssh_username`}}",
       "template_name": "{{ user `artifact_name` }}",
@@ -109,7 +116,8 @@
       ],
       "playbook_file": "./ansible/node.yml",
       "type": "ansible",
-      "user": "builder"
+      "user": "builder",
+      "pause_before": "10s"
     },
     {
       "arch": "{{user `goss_arch`}}",
@@ -150,6 +158,7 @@
     "artifact_name": "{{user `build_name`}}-kube-{{user `kubernetes_semver`}}",
     "boot_wait": "10s",
     "bridge": "{{env `PROXMOX_BRIDGE`}}",
+    "vlan": "{{env `PROXMOX_VLAN`}}",
     "build_timestamp": "{{timestamp}}",
     "containerd_sha256": null,
     "containerd_url": "https://github.com/containerd/containerd/releases/download/v{{user `containerd_version`}}/cri-containerd-cni-{{user `containerd_version`}}-linux-amd64.tar.gz",
@@ -183,12 +192,11 @@
     "node": "{{env `PROXMOX_NODE`}}",
     "proxmox_url": "{{env `PROXMOX_URL`}}",
     "sockets": "2",
-    "ssh_password": "builder",
+    "ssh_private_key_file": "", 
     "ssh_username": "builder",
     "storage_pool": "{{env `PROXMOX_STORAGE_POOL`}}",
-    "storage_pool_type": "lvm",
     "token": "{{env `PROXMOX_TOKEN`}}",
     "username": "{{env `PROXMOX_USERNAME`}}",
-    "vmid": ""
+    "vmid": "{{env `PROXMOX_VMID`}}"
   }
 }

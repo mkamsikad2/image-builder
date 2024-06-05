@@ -1,6 +1,8 @@
 #cloud-config
 autoinstall:
   version: 1
+  early-commands:
+    - systemctl stop ssh
   # Configure the locale
   locale: en_US.UTF-8
   keyboard:
